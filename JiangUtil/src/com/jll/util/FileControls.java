@@ -7,9 +7,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+/**
+ * 文件对象操作工具包
+ * @author 姜玲珑2017年8月28日
+ *
+ */
 public class FileControls {
-	
+	/**
+	 * 文件拷贝
+	 * @param srcFile 源文件绝对路径的文件对象
+	 * @param destFile 目标文件绝对路径的文件对象
+	 * @return 成功拷贝返回true，否则为false
+	 */
 	public static boolean copyFile(File srcFile, File destFile) {
 		boolean flag = false;
 		if (srcFile.exists()) {
@@ -38,10 +47,22 @@ public class FileControls {
 		}
 		return flag;
 	}
-
+	/**
+	 * 
+	 * 文件拷贝
+	 * @param srcFile 源文件绝对路径的字符串
+	 * @param destFile 目标文件绝对路径的字符串
+	 * @return 成功拷贝返回true，否则为false
+	 */
 	public static boolean copyFile(String srcPath, String desPath) {
 		return copyFile(new File(srcPath), new File(desPath));
 	}
+	/**
+	 * 移动文件
+	 * @param srcFile 源文件绝对路径的文件对象
+	 * @param destFile 目标文件绝对路径的文件对象
+	 * @return 成功移动返回true，否则为false
+	 */
 
 	public static boolean moveFile(File srcFile, File destFile) {
 		boolean flag = copyFile(srcFile, destFile);
@@ -50,8 +71,76 @@ public class FileControls {
 		}
 		return flag;
 	}
-
+	/**
+	 * 移动文件
+	 * @param srcFile 源文件绝对路径的字符串
+	 * @param destFile 目标文件绝对路径的字符串
+	 * @return 成功移动返回true，否则为false
+	 */
 	public static boolean moveFile(String srcPath, String desPath) {
 		return moveFile(new File(srcPath), new File(desPath));
 	}
+	/**
+	 * 遍历当前文件夹
+	 * @param srcFile 文件绝对路径字对象
+	 * @return 文件不存在返回-1，否则返回文件家中的文件数
+	 */
+	public static int show(File srcFile) {
+		if(!srcFile.exists()){
+			System.out.println(srcFile.getAbsolutePath()+"文件不存在");
+			return -1;
+		}
+		File[] files = srcFile.listFiles();
+		if(files == null || files.length<1) {
+			System.out.println("空文件夹");
+			return 0;
+		}
+		for(File file : files) {
+			System.out.println(file.getAbsolutePath());
+		}
+		return files.length;
+	}
+	/**
+	 * 遍历当前文件夹
+	 * @param scrPath 文件绝对路径字符串
+	 * @return 文件不存在返回-1，否则返回文件家中的文件数
+	 */
+	public static int show(String scrPath) {
+		File srcFile = new File(scrPath);
+		if(!srcFile.exists()){
+			System.out.println(scrPath+"文件不存在");
+			return -1;
+		}
+		File[] files = srcFile.listFiles();
+		if(files == null || files.length<1) {
+			System.out.println("空文件夹");
+			return 0;
+		}
+		for(File file : files) {
+			System.out.println(file.getAbsolutePath());
+		}
+		return files.length;
+	}
+	public static int showAllFiles(String srcPath) {
+		File srcFile = new File(srcPath);
+		if(!srcFile.exists()){
+			System.out.println(srcPath+"文件不存在");
+			return -1;
+		}
+		File[] files = srcFile.listFiles();
+		System.out.println(srcFile.getAbsolutePath()+",下有"+files.length+"个文件");
+		if(files == null || files.length<1) {
+			System.out.println(srcFile.getAbsolutePath());
+			return 0;
+		}
+		for(File file : files) {
+			if(file.isDirectory()) {
+				showAllFiles(file.getAbsolutePath());
+			}else {
+				System.out.println(file.getAbsolutePath());
+			}
+		}
+		return files.length;
+	}
+
 }
