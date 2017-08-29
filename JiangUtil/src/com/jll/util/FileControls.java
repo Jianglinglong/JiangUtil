@@ -17,6 +17,13 @@ import java.util.List;
  *
  */
 public class FileControls {
+	public static boolean deletFile(String filePath) {
+		return deletFile( new File(filePath));
+	}
+	public static boolean deletFile(File file) {
+		return file.delete();
+	}
+	
 	/**
 	 * 文件拷贝
 	 * 
@@ -31,6 +38,9 @@ public class FileControls {
 		if (srcFile.exists()) {
 			try {
 				if (!srcFile.isDirectory()) {
+					if(!destFile.getParentFile().exists()) {
+						destFile.getParentFile().mkdirs();
+					}
 					FileInputStream in = new FileInputStream(srcFile);
 					DataInputStream srcIn = new DataInputStream(in);
 					FileOutputStream out = new FileOutputStream(destFile);
@@ -46,10 +56,8 @@ public class FileControls {
 					srcIn.close();
 					flag = true;
 				}else {
-					String newDir = destFile.getAbsolutePath()+"/"+srcFile.getName();
-					File dir = new File(newDir);
-					dir.mkdirs();
-					flag=true;
+					destFile.mkdirs();
+					flag = true;
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -184,24 +192,24 @@ public class FileControls {
 	public static void getAllFiles(String srcPath, LinkedList<String> files) {
 		File file = new File(srcPath);
 		if (file.exists()) {
-			files.add(file.getAbsolutePath());
 			File[] fileList = file.listFiles();
 			if (fileList != null && fileList.length > 0) {
 				for (File src : fileList) {
 					getAllFiles(src.getAbsolutePath(), files);
 				}
 			}
+			files.add(file.getAbsolutePath());
 		}
 	}
 	public static void getAllFiles(File srcPath, LinkedList<File> files) {
 		if (srcPath.exists()) {
-			files.add(srcPath);
 			File[] fileList = srcPath.listFiles();
 			if (fileList != null && fileList.length > 0) {
 				for (File src : fileList) {
 					getAllFiles(src, files);
 				}
 			}
+			files.add(srcPath);
 		}
 	}
 }
