@@ -38,9 +38,7 @@ public class FileControls {
 		if (srcFile.exists()) {
 			try {
 				if (!srcFile.isDirectory()) {
-					if(!destFile.getParentFile().exists()) {
-						destFile.getParentFile().mkdirs();
-					}
+					destFile.getParentFile().mkdirs();
 					FileInputStream in = new FileInputStream(srcFile);
 					DataInputStream srcIn = new DataInputStream(in);
 					FileOutputStream out = new FileOutputStream(destFile);
