@@ -7,8 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 文件对象操作工具包
@@ -17,13 +19,30 @@ import java.util.List;
  *
  */
 public class FileControls {
-	public static boolean deletFile(String filePath) {
-		return deletFile( new File(filePath));
+	public static class Filesize implements Serializable {
+		private static final long serialVersionUID = -1035346214239079079L;
+		private File filePath;
+		private long fileSize;
+		public File getFilePath() {
+			return filePath;
+		}
+		public long getFileSize() {
+			return fileSize;
+		}
+		public void setFilePath(String filePath) {
+			this.filePath = new File(filePath);
+			this.fileSize = this.filePath.length();
+		}
 	}
+
+	public static boolean deletFile(String filePath) {
+		return deletFile(new File(filePath));
+	}
+
 	public static boolean deletFile(File file) {
 		return file.delete();
 	}
-	
+
 	/**
 	 * 文件拷贝
 	 * 
@@ -53,7 +72,7 @@ public class FileControls {
 					in.close();
 					srcIn.close();
 					flag = true;
-				}else {
+				} else {
 					destFile.mkdirs();
 					flag = true;
 				}
@@ -199,6 +218,7 @@ public class FileControls {
 			files.add(file.getAbsolutePath());
 		}
 	}
+
 	public static void getAllFiles(File srcPath, LinkedList<File> files) {
 		if (srcPath.exists()) {
 			File[] fileList = srcPath.listFiles();
@@ -208,6 +228,60 @@ public class FileControls {
 				}
 			}
 			files.add(srcPath);
+		}
+	}
+
+	public static void moveFiles(String srcDir, String dir) {
+		LinkedList<String> files = new LinkedList<String>();
+		File srcFile = new File(srcDir);
+		File destFile = new File(dir);
+		if (srcFile.exists()) {
+			if (destFile.exists() || destFile.mkdirs()) {
+				String srcFilePath = srcFile.getAbsolutePath();
+				String destFilePath = destFile.getAbsolutePath();
+				FileControls.getAllFiles(srcFilePath, files);
+				int total = files.size();
+				int copy = 0;
+				int pre = (int) (((double) copy / total) * 1000);
+				for (String file : files) {
+					copy++;
+					int p = (int) (((double) copy / total) * 1000);
+					if (p - pre > 1 || copy == total) {
+						System.out.println("移动:" + (double) p / 10 + "%");
+						pre = p;
+					}
+					int index = file.indexOf(srcFilePath) + srcFilePath.length();
+					String str = file.substring(index);
+					String dest = destFilePath + str;
+					if (!dest.equals(destFilePath)) {
+						FileControls.moveFile(file, dest);
+					} else {
+						FileControls.deletFile(file);
+					}
+				}
+			} else {
+				System.out.println("目标文件\"" + destFile.getAbsolutePath() + "\"异常");
+			}
+		} else {
+			System.out.println("源文件\"" + srcFile.getAbsolutePath() + "\"不存在");
+		}
+	}
+
+	public static void getAllFiles(String srcPath, ArrayList<FileControls.Filesize> files) {
+		File file = new File(srcPath);
+		if (file.exists()) {
+			File[] fileList = file.listFiles();
+			if (fileList != null && fileList.length > 0) {
+				for (File src : fileList) {
+					getAllFiles(src.getAbsolutePath(), files);
+				}
+			}
+			if (!file.isDirectory()) {
+				FileControls.Filesize fileSize = new FileControls.Filesize();
+				fileSize.setFilePath(file.getAbsolutePath());
+				files.add(fileSize);
+			}
+			// files.add(file.getAbsolutePath());
 		}
 	}
 }
