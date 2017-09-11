@@ -1,4 +1,4 @@
-package com.jll.util;
+package com.jll.util.file;
 
 import java.io.File;
 import java.io.FileInputStream;
