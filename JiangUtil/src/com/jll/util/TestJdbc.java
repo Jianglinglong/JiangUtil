@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.jll.util.jdbc.MysqlCUD;
 
-public class TestJdbc {
+public class TestJdbc implements FinalConstants {
 	@Test
 	public void test() {
 		String sql = "delete from teacher where tid = ?";
@@ -14,5 +14,9 @@ public class TestJdbc {
 		sql = "update student set sname=?,gender = ? ,class_id=? where sid=?";
 		Object[] param = {"赵六","女",1,6};
 		System.out.println(MysqlCUD.runSql(database,sql, param)>0?"更新成功":"更新失败");
+	}
+	@Test
+	public void test2() {
+		System.out.println(MySql.DRIVER_CLASS.name());
 	}
 }
