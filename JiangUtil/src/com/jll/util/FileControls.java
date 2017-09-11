@@ -142,7 +142,7 @@ public class FileControls {
 	 * 
 	 * @param srcFile
 	 *            文件绝对路径字对象
-	 * @return 文件不存在返回-1，否则返回文件家中的文件数
+	 * @return 文件不存在返回-1，否则返回文件夹中的文件数
 	 */
 	public static int show(File srcFile) {
 		if (!srcFile.exists()) {
@@ -165,7 +165,7 @@ public class FileControls {
 	 * 
 	 * @param scrPath
 	 *            文件绝对路径字符串
-	 * @return 文件不存在返回-1，否则返回文件家中的文件数
+	 * @return 文件不存在返回-1，否则返回文件夹中的文件数
 	 */
 	public static int show(String scrPath) {
 		File srcFile = new File(scrPath);
