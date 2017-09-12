@@ -11,14 +11,12 @@ package com.jll.util.jdbc;
 
 public interface ConstantMySql {
 	String DRIVER_CLASS = PropertiesProcesser.getInstance().getValue("mysql.driver_class");
-
 	String LOCALHOST = "127.0.0.1";
 	String ROMOTE_SERVER  = PropertiesProcesser.getInstance().getValue("mysql.server");
-	
 	String CRT_USER = PropertiesProcesser.getInstance().getValue("mysql.username");
 	String CRT_PASSWORD = PropertiesProcesser.getInstance().getValue("mysql.password");
-	
 	String CRT_PORT = PropertiesProcesser.getInstance().getValue("mysql.port");
-
+	String DATABASE = PropertiesProcesser.getInstance().getValue("mysql.database");
 	String URL_NODATABASE = "jdbc:mysql://" + LOCALHOST + ":" + CRT_PORT + "/";
+	String URL = URL_NODATABASE + DATABASE;
 }
